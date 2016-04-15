@@ -7,6 +7,7 @@ using System;
 [RequireComponent(typeof(MeshRenderer))]
 
 
+
 public class FiveCell : MonoBehaviour
 {
 
@@ -27,6 +28,7 @@ public class FiveCell : MonoBehaviour
 
     void Start()
     {
+
         rotationOrder = new List<Axis4D>();
         rotationOrder.Add(Axis4D.yz);
         rotationOrder.Add(Axis4D.xw);
@@ -54,11 +56,11 @@ public class FiveCell : MonoBehaviour
 
 
         originalVerts = new List<Vector4>(){
-            new Vector4(0,0,0,2), // A
-            new Vector4(-1,1,1,0), // B
-            new Vector4(1,-1,1,0), // C
-            new Vector4(1,1,-1,0), // D
-            new Vector4(-1,-1,-1,0), // E
+            new Vector4(0,0,0,2), 
+            new Vector4(-1,1,1,0),
+            new Vector4(1,-1,1,0), 
+            new Vector4(1,1,-1,0), 
+            new Vector4(-1,-1,-1,0)
         };
 
         ResetVertices();
