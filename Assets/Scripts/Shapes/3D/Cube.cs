@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -10,6 +10,8 @@ using System;
 
 public class Cube : MonoBehaviour
 {
+	public bool UsingVR = false; // For the functions that won't show when using vr
+
 	MeshFilter meshFilter;
 	// adds a Mesh filter called meshFilter so we can access it from the script
 	Mesh mesh;
@@ -45,7 +47,6 @@ public class Cube : MonoBehaviour
 		rotation.Add (Axis4D.yz, 0f); // adds the axis yz with a float of 0f
 		rotation.Add (Axis4D.yw, 0f); // adds the axis yw with a float of 0f
 		rotation.Add (Axis4D.zw, 0f); // adds the axis zw with a float of 0f
-
 
 		meshFilter = GetComponent<MeshFilter> (); // Makes the meshFilter we defined earlier = the MeshFilter on the GameObject
 		mesh = meshFilter.sharedMesh; // Makes the mesh we defined earlier = meshFilter.sharedMesh
@@ -89,39 +90,58 @@ public class Cube : MonoBehaviour
 
 	bool freezeRotation = false; // Creates a boolean called freezeRotation and sets it to false
 
-	void OnGUI () // The Function that handles our GUI
+	void OnGUI ()
 	{
+		if (UsingVR == true) { // Uses only if VR is enables, hides the rotators
 
-		/* This pretty much just makes our GUI... its pretty self explanatory...
-		   It mainly makes sliders, but there are a few toggles there as well... */
-		freezeRotation = GUI.Toggle (new Rect (25, 15, 200, 30), freezeRotation, "Freeze Rotation");
+			freezeRotation = GUI.Toggle(new Rect(25, 15, 200, 30), freezeRotation, "Freeze Rotation");
+			rotation[Axis4D.xy] = Mathf.Repeat(rotation[Axis4D.xy], 360f);
+			rotation[Axis4D.xz] = Mathf.Repeat(rotation[Axis4D.xz], 360f);
+			rotation[Axis4D.xw] = Mathf.Repeat(rotation[Axis4D.xw], 360f);
+			rotation[Axis4D.yz] = Mathf.Repeat(rotation[Axis4D.yz], 360f);
+			rotation[Axis4D.yw] = Mathf.Repeat(rotation[Axis4D.yw], 360f);
+			rotation[Axis4D.zw] = Mathf.Repeat(rotation[Axis4D.zw], 360f);
 
-		GUI.Label (new Rect (25, 25, 100, 30), "XY");
-		rotation [Axis4D.xy] = GUI.HorizontalSlider (new Rect (25, 50, 100, 30), Mathf.Repeat (rotation [Axis4D.xy], 360f), 0.0F, 360.0F);
-		GUI.Label (new Rect (25, 75, 100, 30), "XZ");
-		rotation [Axis4D.xz] = GUI.HorizontalSlider (new Rect (25, 100, 100, 30), Mathf.Repeat (rotation [Axis4D.xz], 360f), 0.0F, 360.0F);
-		GUI.Label (new Rect (25, 125, 100, 30), "XW");
-		rotation [Axis4D.xw] = GUI.HorizontalSlider (new Rect (25, 150, 100, 30), Mathf.Repeat (rotation [Axis4D.xw], 360f), 0.0F, 360.0F);
-		GUI.Label (new Rect (25, 175, 100, 30), "YZ");
-		rotation [Axis4D.yz] = GUI.HorizontalSlider (new Rect (25, 200, 100, 30), Mathf.Repeat (rotation [Axis4D.yz], 360f), 0.0F, 360.0F);
-		GUI.Label (new Rect (25, 225, 100, 30), "YW");
-		rotation [Axis4D.yw] = GUI.HorizontalSlider (new Rect (25, 250, 100, 30), Mathf.Repeat (rotation [Axis4D.yw], 360f), 0.0F, 360.0F);
-		GUI.Label (new Rect (25, 275, 100, 30), "ZW");
-		rotation [Axis4D.zw] = GUI.HorizontalSlider (new Rect (25, 300, 100, 30), Mathf.Repeat (rotation [Axis4D.zw], 360f), 0.0F, 360.0F);
+			if (!freezeRotation) {
+				Rotate (Axis4D.xy, 0.1f);
+				Rotate (Axis4D.xz, 0.15f);
+				Rotate (Axis4D.xw, 0.6f);
+				Rotate (Axis4D.yw, 0.3f);
+				Rotate (Axis4D.yz, 0.45f);
+				Rotate (Axis4D.zw, 0.5f);
+			} 
 
-		GUI.Label (new Rect (25, 325, 200, 30), "Zoom with the Mouse Wheel");
-		Camera.main.orthographic = GUI.Toggle (new Rect (25, 375, 200, 30), Camera.main.orthographic, "Orth Camera");
+			ApplyRotationToVerts ();
+		} 
 
-		if (!freezeRotation) { // If the freezeRotation variable is true, it sets values in the rotate dictionary
-			Rotate (Axis4D.xy, 0.1f);
-			Rotate (Axis4D.xz, 0.15f);
-			Rotate (Axis4D.xw, 0.6f);
-			Rotate (Axis4D.yw, 0.3f);
-			Rotate (Axis4D.yz, 0.45f);
-			Rotate (Axis4D.zw, 0.5f);
+		if (UsingVR == false) { // If VR is disables, shows full controls
+			freezeRotation = GUI.Toggle (new Rect (25, 15, 200, 30), freezeRotation, "Freeze Rotation");
+
+			GUI.Label (new Rect (25, 25, 100, 30), "XY");
+			rotation [Axis4D.xy] = GUI.HorizontalSlider (new Rect (25, 50, 100, 30), Mathf.Repeat (rotation [Axis4D.xy], 360f), 0.0F, 360.0F);
+			GUI.Label (new Rect (25, 75, 100, 30), "XZ");
+			rotation [Axis4D.xz] = GUI.HorizontalSlider (new Rect (25, 100, 100, 30), Mathf.Repeat (rotation [Axis4D.xz], 360f), 0.0F, 360.0F);
+			GUI.Label (new Rect (25, 125, 100, 30), "XW");
+			rotation [Axis4D.xw] = GUI.HorizontalSlider (new Rect (25, 150, 100, 30), Mathf.Repeat (rotation [Axis4D.xw], 360f), 0.0F, 360.0F);
+			GUI.Label (new Rect (25, 175, 100, 30), "YZ");
+			rotation [Axis4D.yz] = GUI.HorizontalSlider (new Rect (25, 200, 100, 30), Mathf.Repeat (rotation [Axis4D.yz], 360f), 0.0F, 360.0F);
+			GUI.Label (new Rect (25, 225, 100, 30), "YW");
+			rotation [Axis4D.yw] = GUI.HorizontalSlider (new Rect (25, 250, 100, 30), Mathf.Repeat (rotation [Axis4D.yw], 360f), 0.0F, 360.0F);
+			GUI.Label (new Rect (25, 275, 100, 30), "ZW");
+			rotation [Axis4D.zw] = GUI.HorizontalSlider (new Rect (25, 300, 100, 30), Mathf.Repeat (rotation [Axis4D.zw], 360f), 0.0F, 360.0F);
+
+
+			if (!freezeRotation) {
+				Rotate (Axis4D.xy, 0.1f);
+				Rotate (Axis4D.xz, 0.15f);
+				Rotate (Axis4D.xw, 0.6f);
+				Rotate (Axis4D.yw, 0.3f);
+				Rotate (Axis4D.yz, 0.45f);
+				Rotate (Axis4D.zw, 0.5f);
+			} 
+
+			ApplyRotationToVerts ();
 		}
-
-		ApplyRotationToVerts (); // Runs the ApplyRotationToVerts functions
 	}
 
 	void DrawCube () //Creates the Draw Cube Function
@@ -223,14 +243,14 @@ public class Cube : MonoBehaviour
 	{
 		float tmpX = c * v.x + s * v.y;
 		float tmpY = -s * v.x + c * v.y;
-		return new Vector4 (tmpX, tmpY, v.z, v.w);
+		return new Vector4 (tmpX, tmpY, v.z, v.w); // This is V
 	}
 
 	Vector4 RotateAroundXZ (Vector4 v, float s, float c)
 	{
 		float tmpX = c * v.x + s * v.z;
 		float tmpZ = -s * v.x + c * v.z;
-		return new Vector4 (tmpX, v.y, tmpZ, v.w);
+		return new Vector4 (tmpX, v.y, tmpZ, v.w); // This is V
 	}
 
 	Vector4 RotateAroundXW (Vector4 v, float s, float c)

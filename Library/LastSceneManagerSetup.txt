@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Cube.unity
+- path: Assets/Scenes/VR/TesseractVR.unity
   isLoaded: 1
   isActive: 1

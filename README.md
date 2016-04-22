@@ -4,7 +4,13 @@ This Project is to be able to create 4D Shapes in a simple way, and to impliment
 ## Installation
 To use this, take the project and copy it to your computer and then open one of the Unity scenes (in the assets/Scenes folder).
 
-Note. You must have Unity3D installed, also, it has also only been tested in Unity Pro so some of the materials / shaders might not work 100% 
+OR
+
+Download the asset-package from the Asset Packs folder, and it will contain all of the assets used in this project!
+Use it in any project, just import
+
+Note. You must have Unity3D installed
+
 ## Usage
 You have to figure it out at this point! Documentation will be written further on in the project
 
@@ -21,6 +27,7 @@ This project started as a Unity3D port of the original HTML5 canvas project (See
 ## Credits
 Original Project - [mrmilosz](https://github.com/mrmilosz/hypersolid)
 Original Port to C# [Tom Kail](tomkail.com/tesseract/)
+All Google Cardboard SDK Property of Google
 
 ## License
 Released under GNU (General Public License)
@@ -30,6 +37,5 @@ Copyright Adam Kelly 2016-2017
 ## To Do
 1. Add More Shapes
 2. Improve Interface / Gui
-3. Add VR Controller
 4. Optimise and Improve Code / Scripts
 5. Write Documentation

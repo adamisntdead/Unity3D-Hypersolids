@@ -9,6 +9,8 @@ using System;
 
 public class Tetrahedron : MonoBehaviour
 {
+	public bool UsingVR = false;
+
     MeshFilter meshFilter;
     Mesh mesh;
 
@@ -75,39 +77,59 @@ public class Tetrahedron : MonoBehaviour
 
     bool freezeRotation = false;
 
-    void OnGUI()
-    {
+	void OnGUI ()
+	{
+		if (UsingVR == true) {
 
-        freezeRotation = GUI.Toggle(new Rect(25, 15, 200, 30), freezeRotation, "Freeze Rotation");
+			freezeRotation = GUI.Toggle(new Rect(25, 15, 200, 30), freezeRotation, "Freeze Rotation");
+			rotation[Axis4D.xy] = Mathf.Repeat(rotation[Axis4D.xy], 360f);
+			rotation[Axis4D.xz] = Mathf.Repeat(rotation[Axis4D.xz], 360f);
+			rotation[Axis4D.xw] = Mathf.Repeat(rotation[Axis4D.xw], 360f);
+			rotation[Axis4D.yz] = Mathf.Repeat(rotation[Axis4D.yz], 360f);
+			rotation[Axis4D.yw] = Mathf.Repeat(rotation[Axis4D.yw], 360f);
+			rotation[Axis4D.zw] = Mathf.Repeat(rotation[Axis4D.zw], 360f);
 
-        GUI.Label(new Rect(25, 25, 100, 30), "XY");
-        rotation[Axis4D.xy] = GUI.HorizontalSlider(new Rect(25, 50, 100, 30), Mathf.Repeat(rotation[Axis4D.xy], 360f), 0.0F, 360.0F);
-        GUI.Label(new Rect(25, 75, 100, 30), "XZ");
-        rotation[Axis4D.xz] = GUI.HorizontalSlider(new Rect(25, 100, 100, 30), Mathf.Repeat(rotation[Axis4D.xz], 360f), 0.0F, 360.0F);
-        GUI.Label(new Rect(25, 125, 100, 30), "XW");
-        rotation[Axis4D.xw] = GUI.HorizontalSlider(new Rect(25, 150, 100, 30), Mathf.Repeat(rotation[Axis4D.xw], 360f), 0.0F, 360.0F);
-        GUI.Label(new Rect(25, 175, 100, 30), "YZ");
-        rotation[Axis4D.yz] = GUI.HorizontalSlider(new Rect(25, 200, 100, 30), Mathf.Repeat(rotation[Axis4D.yz], 360f), 0.0F, 360.0F);
-        GUI.Label(new Rect(25, 225, 100, 30), "YW");
-        rotation[Axis4D.yw] = GUI.HorizontalSlider(new Rect(25, 250, 100, 30), Mathf.Repeat(rotation[Axis4D.yw], 360f), 0.0F, 360.0F);
-        GUI.Label(new Rect(25, 275, 100, 30), "ZW");
-        rotation[Axis4D.zw] = GUI.HorizontalSlider(new Rect(25, 300, 100, 30), Mathf.Repeat(rotation[Axis4D.zw], 360f), 0.0F, 360.0F);
+			if (!freezeRotation) {
+				Rotate (Axis4D.xy, 0.1f);
+				Rotate (Axis4D.xz, 0.15f);
+				Rotate (Axis4D.xw, 0.6f);
+				Rotate (Axis4D.yw, 0.3f);
+				Rotate (Axis4D.yz, 0.45f);
+				Rotate (Axis4D.zw, 0.5f);
+			} 
 
-        GUI.Label(new Rect(25, 325, 200, 30), "Zoom with the Mouse Wheel");
-        Camera.main.orthographic = GUI.Toggle(new Rect(25, 375, 200, 30), Camera.main.orthographic, "Orth Camera");
+			ApplyRotationToVerts ();
+		} 
 
-        if (!freezeRotation)
-        {
-            Rotate(Axis4D.xy, 0.1f);
-            Rotate(Axis4D.xz, 0.15f);
-            Rotate(Axis4D.xw, 0.6f);
-            Rotate(Axis4D.yw, 0.3f);
-            Rotate(Axis4D.yz, 0.45f);
-            Rotate(Axis4D.zw, 0.5f);
-        }
+		if (UsingVR == false) {
+			freezeRotation = GUI.Toggle (new Rect (25, 15, 200, 30), freezeRotation, "Freeze Rotation");
 
-        ApplyRotationToVerts();
-    }
+			GUI.Label (new Rect (25, 25, 100, 30), "XY");
+			rotation [Axis4D.xy] = GUI.HorizontalSlider (new Rect (25, 50, 100, 30), Mathf.Repeat (rotation [Axis4D.xy], 360f), 0.0F, 360.0F);
+			GUI.Label (new Rect (25, 75, 100, 30), "XZ");
+			rotation [Axis4D.xz] = GUI.HorizontalSlider (new Rect (25, 100, 100, 30), Mathf.Repeat (rotation [Axis4D.xz], 360f), 0.0F, 360.0F);
+			GUI.Label (new Rect (25, 125, 100, 30), "XW");
+			rotation [Axis4D.xw] = GUI.HorizontalSlider (new Rect (25, 150, 100, 30), Mathf.Repeat (rotation [Axis4D.xw], 360f), 0.0F, 360.0F);
+			GUI.Label (new Rect (25, 175, 100, 30), "YZ");
+			rotation [Axis4D.yz] = GUI.HorizontalSlider (new Rect (25, 200, 100, 30), Mathf.Repeat (rotation [Axis4D.yz], 360f), 0.0F, 360.0F);
+			GUI.Label (new Rect (25, 225, 100, 30), "YW");
+			rotation [Axis4D.yw] = GUI.HorizontalSlider (new Rect (25, 250, 100, 30), Mathf.Repeat (rotation [Axis4D.yw], 360f), 0.0F, 360.0F);
+			GUI.Label (new Rect (25, 275, 100, 30), "ZW");
+			rotation [Axis4D.zw] = GUI.HorizontalSlider (new Rect (25, 300, 100, 30), Mathf.Repeat (rotation [Axis4D.zw], 360f), 0.0F, 360.0F);
+
+
+			if (!freezeRotation) {
+				Rotate (Axis4D.xy, 0.1f);
+				Rotate (Axis4D.xz, 0.15f);
+				Rotate (Axis4D.xw, 0.6f);
+				Rotate (Axis4D.yw, 0.3f);
+				Rotate (Axis4D.yz, 0.45f);
+				Rotate (Axis4D.zw, 0.5f);
+			} 
+
+			ApplyRotationToVerts ();
+		}
+	}
 
     void DrawTetrahedron()
     {
