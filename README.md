@@ -1,6 +1,9 @@
 # 4D-Simulator-Unity3D
 This Project is to be able to create 4D Shapes in a simple way, and to impliment thes models in VR and make it controllable by control boards, and other Implimentation.
 
+## Preview
+![](https://raw.githubusercontent.com/adamisntdead/Files/master/tesseract.gif)
+
 ## Installation
 To use this, take the project and copy it to your computer and then open one of the Unity scenes (in the assets/Scenes folder).
 
@@ -26,7 +29,9 @@ This project started as a Unity3D port of the original HTML5 canvas project (See
 
 ## Credits
 Original Project - [mrmilosz](https://github.com/mrmilosz/hypersolid)
+
 Original Port to C# [Tom Kail](tomkail.com/tesseract/)
+
 All Google Cardboard SDK Property of Google
 
 ## License
